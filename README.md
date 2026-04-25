@@ -1,2 +1,170 @@
-# demo
-its a demo website
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orbitron V2 | Liquid Icons</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Plus+Jakarta+Sans:wght@400;700&display=swap');
+
+        :root {
+            --neon: #9dff00;
+            --bg: #0d0f14;
+            --card: #1a1d26;
+            --border: rgba(157, 255, 0, 0.15);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: var(--bg); color: #fff; font-family: 'Plus Jakarta Sans', sans-serif; overflow-x: hidden; }
+
+        .container { max-width: 1300px; margin: 0 auto; padding: 40px 20px; }
+
+        header { text-align: center; margin-bottom: 40px; }
+        header h1 { font-family: 'Orbitron', sans-serif; color: var(--neon); letter-spacing: 3px; font-size: 2.5rem; text-shadow: 0 0 15px rgba(157, 255, 0, 0.3); }
+
+        /* Navigation & Search */
+        .sticky-nav { position: sticky; top: 0; background: rgba(13, 15, 20, 0.9); backdrop-filter: blur(10px); z-index: 1000; padding: 15px 0; border-bottom: 1px solid var(--border); }
+        .search-box { max-width: 500px; margin: 0 auto 20px; }
+        #search { width: 100%; padding: 14px 25px; border-radius: 100px; border: 1px solid var(--border); background: var(--card); color: white; outline: none; transition: 0.3s; }
+        #search:focus { border-color: var(--neon); box-shadow: 0 0 20px rgba(157, 255, 0, 0.2); }
+
+        .slider { display: flex; gap: 12px; overflow-x: auto; padding: 10px 0; scrollbar-width: none; }
+        .slider::-webkit-scrollbar { display: none; }
+        .btn { padding: 10px 25px; border-radius: 12px; background: var(--card); border: 1px solid var(--border); color: #888; cursor: pointer; white-space: nowrap; font-weight: bold; transition: 0.3s; }
+        .btn.active { background: var(--neon); color: #000; border-color: var(--neon); transform: scale(1.05); }
+
+        /* Grid */
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; margin-top: 30px; }
+
+        /* THE LIQUID ICON CARD */
+        .card {
+            background: var(--card);
+            border-radius: 30px;
+            padding: 35px 25px;
+            border: 1px solid var(--border);
+            text-align: center;
+            transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+        }
+
+        .card:hover { transform: translateY(-15px); border-color: var(--neon); }
+
+        /* Floating Organic Shape Icon */
+        .icon-box {
+            width: 100px; height: 100px;
+            margin: 0 auto 20px;
+            background: linear-gradient(135deg, #252a36, #111);
+            /* Tedha-Medha Organic Shape */
+            border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; 
+            display: flex; align-items: center; justify-content: center;
+            font-size: 2.5rem;
+            border: 1px solid var(--border);
+            animation: float 4s ease-in-out infinite;
+            transition: 0.5s;
+        }
+
+        @keyframes float { 
+            0%, 100% { transform: translateY(0) rotate(0deg); border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; } 
+            50% { transform: translateY(-15px) rotate(5deg); border-radius: 50% 50% 50% 50%; } 
+        }
+
+        .card:hover .icon-box { background: var(--neon); color: #000; border-radius: 50%; transform: rotate(10deg) scale(1.1); }
+
+        .sub-tag { color: var(--neon); font-size: 0.75rem; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; display: block; }
+        .title { font-size: 1.3rem; font-weight: 700; margin-bottom: 25px; }
+
+        .open-btn {
+            width: 100%; padding: 12px; background: transparent; border: 2px solid var(--neon);
+            color: var(--neon); border-radius: 15px; font-weight: 800; cursor: pointer; transition: 0.3s;
+            font-family: 'Orbitron', sans-serif; font-size: 0.8rem;
+        }
+
+        .open-btn:hover { background: var(--neon); color: #000; box-shadow: 0 0 15px var(--neon); }
+
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header><h1>FUTURE LIBRARY</h1></header>
+
+    <div class="sticky-nav">
+        <div class="search-box">
+            <input type="text" id="search" placeholder="Search subject or class..." onkeyup="filter()">
+        </div>
+        <div class="slider">
+            <button class="btn active" onclick="filterClass('all', this)">All Classes</button>
+            <button class="btn" onclick="filterClass('1', this)">Class 1</button>
+            <button class="btn" onclick="filterClass('2', this)">Class 2</button>
+            <button class="btn" onclick="filterClass('3', this)">Class 3</button>
+            <button class="btn" onclick="filterClass('4', this)">Class 4</button>
+            <button class="btn" onclick="filterClass('5', this)">Class 5</button>
+            <button class="btn" onclick="filterClass('6', this)">Class 6</button>
+            <button class="btn" onclick="filterClass('7', this)">Class 7</button>
+            <button class="btn" onclick="filterClass('8', this)">Class 8</button>
+        </div>
+    </div>
+
+    <div class="grid" id="bookGrid">
+        </div>
+</div>
+
+<script>
+    const subjects = [
+        { name: "Mathematics", icon: "📐" },
+        { name: "Science", icon: "🧪" },
+        { name: "English", icon: "📖" },
+        { name: "Hindi", icon: "🕉️" },
+        { name: "Social Studies", icon: "🌍" },
+        { name: "Computer", icon: "💻" },
+        { name: "General Knowledge", icon: "🧠" },
+        { name: "Arts & Craft", icon: "🎨" }
+    ];
+
+    const bookGrid = document.getElementById('bookGrid');
+
+    // Generate 8 books for each of the 8 classes (64 total)
+    for(let c=1; c<=8; c++) {
+        subjects.forEach(sub => {
+            const card = document.createElement('div');
+            card.className = `card class-${c}`;
+            card.setAttribute('data-class', c);
+            card.innerHTML = `
+                <span class="sub-tag">${sub.name}</span>
+                <div class="icon-box">${sub.icon}</div>
+                <div class="title">Grade ${c} ${sub.name}</div>
+                <button class="open-btn">OPEN EBOOK</button>
+            `;
+            bookGrid.appendChild(card);
+        });
+    }
+
+    // Filter by Class
+    function filterClass(cls, btn) {
+        document.querySelectorAll('.btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        const cards = document.querySelectorAll('.card');
+        cards.forEach(card => {
+            if(cls === 'all' || card.getAttribute('data-class') === cls) {
+                card.classList.remove('hidden');
+            } else {
+                card.classList.add('hidden');
+            }
+        });
+    }
+
+    // Search Logic
+    function filter() {
+        let input = document.getElementById('search').value.toLowerCase();
+        let cards = document.querySelectorAll('.card:not(.hidden)');
+        cards.forEach(card => {
+            let text = card.innerText.toLowerCase();
+            card.style.display = text.includes(input) ? "block" : "none";
+        });
+    }
+</script>
+
+</body>
+</html>
